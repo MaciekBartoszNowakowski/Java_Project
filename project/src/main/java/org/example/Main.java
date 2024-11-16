@@ -7,10 +7,10 @@ import org.example.fileHandling.*;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        String inputFilePath= args[0];
-        String outputFilePath = args[1];
-//        String inputFilePath= "exampleData.json";
-//        String outputFilePath = "exampleOutput.json";
+//        String inputFilePath= args[0];
+//        String outputFilePath = args[1];
+        String inputFilePath= "exampleData.json";
+        String outputFilePath = "exampleOutput.json";
 
         InputData input = Reader.read(inputFilePath);
 
