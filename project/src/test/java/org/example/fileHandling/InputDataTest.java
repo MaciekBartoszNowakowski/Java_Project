@@ -14,7 +14,7 @@ public class InputDataTest {
         command.setStartRoad("south");
         command.setVehicleId("vehicle1");
 
-        AddVehicleCommand command2 =new AddVehicleCommand();
+        AddVehicleCommand command2 = new AddVehicleCommand();
         command2.setEndRoad("south");
         command2.setStartRoad("north");
         command2.setVehicleId("vehicle2");

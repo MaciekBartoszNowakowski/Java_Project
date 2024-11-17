@@ -6,9 +6,11 @@ import java.util.List;
 public class Lane {
     LinkedList<Vehicle> vehicles = new LinkedList<>();
 
-    private final String laneName;
+    private final WorldDirection laneName;
 
-    public Lane(String laneName){
+    private Lights currentLight = Lights.RED;
+
+    public Lane(WorldDirection laneName){
         this.laneName = laneName;
     };
 
@@ -16,13 +18,27 @@ public class Lane {
         return this.vehicles.size();
     }
 
-    public void addCar(Vehicle newVehicle){
+    public void addVehicle(Vehicle newVehicle){
         this.vehicles.add(newVehicle);
     }
 
     public Vehicle getVehicle(){
-        return this.vehicles.removeFirst();
+        if (currentLight == Lights.GREEN && this.carsAmount()!=0) {
+            return this.vehicles.removeFirst();
+        }
+        else{
+            return null;
+        }
     }
+
+    public void blockLane(){
+        currentLight = currentLight.block();
+    }
+
+    public void letLane(){
+        currentLight = currentLight.let();
+    }
+
 
     public Vehicle lookUpVehicle(){
         if (this.carsAmount()!=0) {
@@ -32,5 +48,20 @@ public class Lane {
             return null;
         }
     }
+
+    public int importance(int currentStep){
+        Vehicle currentVehicle = this.lookUpVehicle();
+        if(currentVehicle!=null) {
+            return this.carsAmount() * 2 + currentVehicle.waitingSteps(currentStep);
+        }
+        else{
+            return 0;
+        }
+    }
+
+    public WorldDirection getLaneName(){
+        return laneName;
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package org.example.Logic;
 
+import org.example.fileHandling.AddVehicleCommand;
+
 public class Vehicle {
 
     private final WorldDirection initialDirection;
@@ -9,8 +11,10 @@ public class Vehicle {
 
     private final String vehicleId;
 
-    public Vehicle(String initialDirection, String destinationDirection, int arrivalStep, String vehicleId) {
-
+    public Vehicle(AddVehicleCommand vahicleData, int arrivalStep) {
+        String vehicleId = vahicleData.getVehicleId();
+        String initialDirection = vahicleData.getStartRoad();
+        String destinationDirection = vahicleData.getEndRoad();
         switch (initialDirection) {
             case "north" -> this.initialDirection = WorldDirection.NORTH;
             case "east" -> this.initialDirection = WorldDirection.EAST;

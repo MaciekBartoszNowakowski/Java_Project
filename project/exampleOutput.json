@@ -1,7 +1,0 @@
-{
-  "steps" : [ {
-    "vehicles" : [ "vehicle1", "vehicle2" ]
-  }, {
-    "vehicles" : [ "vehicle3" ]
-  } ]
-}
