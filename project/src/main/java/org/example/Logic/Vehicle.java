@@ -11,10 +11,10 @@ public class Vehicle {
 
     private final String vehicleId;
 
-    public Vehicle(AddVehicleCommand vahicleData, int arrivalStep) {
-        String vehicleId = vahicleData.getVehicleId();
-        String initialDirection = vahicleData.getStartRoad();
-        String destinationDirection = vahicleData.getEndRoad();
+    public Vehicle(AddVehicleCommand vehicleData, int arrivalStep) {
+        String vehicleId = vehicleData.getVehicleId();
+        String initialDirection = vehicleData.getStartRoad();
+        String destinationDirection = vehicleData.getEndRoad();
         switch (initialDirection) {
             case "north" -> this.initialDirection = WorldDirection.NORTH;
             case "east" -> this.initialDirection = WorldDirection.EAST;
