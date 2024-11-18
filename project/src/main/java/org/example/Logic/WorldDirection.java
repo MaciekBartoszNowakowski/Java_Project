@@ -29,7 +29,7 @@ public enum WorldDirection {
             case NORTH -> EAST;
             case WEST -> NORTH;
             case SOUTH -> WEST;
-            case EAST -> EAST;
+            case EAST -> SOUTH;
         };
     }
 

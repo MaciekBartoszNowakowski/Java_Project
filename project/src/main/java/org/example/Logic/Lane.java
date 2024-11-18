@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Lane {
-    LinkedList<Vehicle> vehicles = new LinkedList<>();
+    private final LinkedList<Vehicle> vehicles = new LinkedList<>();
 
     private final WorldDirection laneName;
 
@@ -78,5 +78,7 @@ public class Lane {
         return laneName;
     }
 
-
+    protected Lights getCurrentLight() {
+        return currentLight;
+    }
 }

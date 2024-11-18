@@ -19,7 +19,7 @@ public class LightsDistributor {
         eastLane = laneMap.get(WorldDirection.EAST);
     }
 
-    private void compareLeftAndOppositeLanes(WorldDirection currentDirection, int currentStep) {
+    protected void compareLeftAndOppositeLanes(WorldDirection currentDirection, int currentStep) {
         WorldDirection oppositeDirection = currentDirection.across();
         WorldDirection leftDirection = currentDirection.left();
         Vehicle oppositeVehicle = this.laneMap.get(oppositeDirection).lookUpVehicle();
@@ -32,7 +32,7 @@ public class LightsDistributor {
             }
         } else {
             if (oppositeVehicle.getDestinationDirection() == currentDirection) {
-                if (leftVehicle.getDestinationDirection() == currentDirection.right()) {
+                if (leftVehicle.getDestinationDirection() == currentDirection) {
                     if (this.laneMap.get(leftDirection).importance(currentStep) > this.laneMap.get(oppositeDirection).importance(currentStep)) {
                         this.laneMap.get(leftDirection).conditionalLight();
                     } else {
