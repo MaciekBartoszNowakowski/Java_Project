@@ -2,15 +2,19 @@ package org.example.Logic;
 
 public enum Lights {
     RED,
-    GREEN;
+    GREEN,
+    RIGHT;
 
-    public Lights let(){
+    public Lights let() {
         return GREEN;
     }
 
-    public Lights block(){
+    public Lights block() {
         return RED;
+    }
 
+    public Lights turnRight() {
+        return RIGHT;
     }
 
 }

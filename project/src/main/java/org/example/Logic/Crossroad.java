@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Crossroad {
     private InputData input;
 
@@ -17,9 +20,8 @@ public class Crossroad {
     private Lane westLane = new Lane(WorldDirection.WEST);
     private Lane southLane = new Lane(WorldDirection.SOUTH);
     private Lane eastLane = new Lane(WorldDirection.EAST);
-    private ArrayList<Lane> lanes = new ArrayList<>(
-            Arrays.asList(northLane, westLane, eastLane, southLane)
-    );
+
+    private Map<WorldDirection, Lane> laneMap = new HashMap<>();
 
     private int currentStep = 0;
     private final String outputFilePath;
@@ -28,6 +30,12 @@ public class Crossroad {
         this.input = input;
         this.output = output;
         this.outputFilePath = outputFilePath;
+
+        laneMap.put(WorldDirection.NORTH, northLane);
+        laneMap.put(WorldDirection.WEST, westLane);
+        laneMap.put(WorldDirection.SOUTH, southLane);
+        laneMap.put(WorldDirection.EAST, eastLane);
+
     }
 
     public void simulate() {
@@ -63,20 +71,103 @@ public class Crossroad {
                 }
 
                 WorldDirection currentDirection = importantLane.getLaneName();
-
-                for (Lane lane : this.lanes) {
-                    if (lane.getLaneName() == currentDirection || lane.getLaneName().across() == currentDirection) {
-                        lane.letLane();
-                    } else {
+                if (importantLane.lookUpVehicle()!= null){
+                    WorldDirection destinationDirection = importantLane.lookUpVehicle().getDestinationDirection();
+                    for (Lane lane : this.laneMap.values()) {
                         lane.blockLane();
                     }
+                    if (currentDirection.left() == destinationDirection) {
+                        importantLane.letLane();
+                        this.laneMap.get(currentDirection.left()).conditionalLight();
+                    } else if (currentDirection.across() == destinationDirection) {
+                        importantLane.letLane();
+
+                        WorldDirection oppositeDirection = currentDirection.across();
+                        WorldDirection leftDirection = currentDirection.left();
+                        Vehicle oppositeVehicle = this.laneMap.get(oppositeDirection).lookUpVehicle();
+                        Vehicle leftVehicle = this.laneMap.get(leftDirection).lookUpVehicle();
+                        if (oppositeVehicle == null) {
+                            this.laneMap.get(leftDirection).conditionalLight();
+                        }
+                        else if (leftVehicle == null) {
+                            if (oppositeVehicle.getDestinationDirection() != currentDirection.right()) {
+                                this.laneMap.get(oppositeDirection).letLane();
+                            }
+                        } else {
+                            if (oppositeVehicle.getDestinationDirection() == currentDirection) {
+                                if (leftVehicle.getDestinationDirection() == currentDirection.right()) {
+                                    if (this.laneMap.get(leftDirection).importance(currentStep) > this.laneMap.get(oppositeDirection).importance(currentStep)) {
+                                        this.laneMap.get(leftDirection).conditionalLight();
+                                    } else {
+                                        this.laneMap.get(oppositeDirection).letLane();
+                                    }
+
+                                } else {
+                                    this.laneMap.get(oppositeDirection).letLane();
+                                }
+                            } else {
+                                this.laneMap.get(leftDirection).conditionalLight();
+                                this.laneMap.get(oppositeDirection).conditionalLight();
+                            }
+                        }
+
+                    }
+                    else {
+                        importantLane.conditionalLight();
+
+
+                        WorldDirection oppositeDirection = currentDirection.across();
+                        WorldDirection leftDirection = currentDirection.left();
+                        WorldDirection rightDirection = currentDirection.right();
+                        Vehicle oppositeVehicle = this.laneMap.get(oppositeDirection).lookUpVehicle();
+                        Vehicle leftVehicle = this.laneMap.get(leftDirection).lookUpVehicle();
+    //                    Vehicle rightVehicle = this.laneMap.get(rightDirection).lookUpVehicle();
+
+    //                    if (rightVehicle == null || rightVehicle.getDestinationDirection()==oppositeDirection){
+                        this.laneMap.get(rightDirection).conditionalLight();
+
+                        if (oppositeVehicle == null) {
+                            this.laneMap.get(leftDirection).conditionalLight();
+                        }
+                        else if (leftVehicle == null) {
+                            if (oppositeVehicle.getDestinationDirection() != currentDirection.right()) {
+                                this.laneMap.get(oppositeDirection).letLane();
+                            }
+                        } else {
+                            if (oppositeVehicle.getDestinationDirection() == currentDirection) {
+                                if (leftVehicle.getDestinationDirection() == currentDirection.right()) {
+                                    if (this.laneMap.get(leftDirection).importance(currentStep) > this.laneMap.get(oppositeDirection).importance(currentStep)) {
+                                        this.laneMap.get(leftDirection).conditionalLight();
+                                    } else {
+                                        this.laneMap.get(oppositeDirection).letLane();
+                                    }
+
+                                } else {
+                                    this.laneMap.get(oppositeDirection).letLane();
+                                }
+                            } else {
+                                this.laneMap.get(leftDirection).conditionalLight();
+                                this.laneMap.get(oppositeDirection).conditionalLight();
+                            }
+                        }
+                    }
                 }
-                for (Lane lane : this.lanes) {
+
+//                obsluga
+//                for (Lane lane : this.lanes) {
+//                    if (lane.getLaneName() == currentDirection || lane.getLaneName().across() == currentDirection) {
+//                        lane.letLane();
+//                    } else {
+//                        lane.blockLane();
+//                    }
+//                }
+                for (Lane lane : this.laneMap.values()) {
                     Vehicle goingVehicle = lane.getVehicle();
-                    if (goingVehicle!=null){
+                    if (goingVehicle != null) {
                         step.addVehicle(goingVehicle.getVehicleId());
                     }
                 }
+
 
                 output.addStep(step);
 
