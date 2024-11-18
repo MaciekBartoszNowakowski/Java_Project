@@ -9,19 +9,15 @@ import java.util.Objects;
 public class InputData {
     private List<Command> commands;
 
-//    public List<Command> getCommands() {
-//        return this.commands;
-//    }
-
     public void setCommands(List<Command> commands) {
         this.commands = commands;
     }
 
-    public Command getCurrentCommand(){
+    public Command getCurrentCommand() {
         return commands.remove(0);
     }
 
-    public boolean remaining(){
+    public boolean remaining() {
         return !commands.isEmpty();
     }
 
